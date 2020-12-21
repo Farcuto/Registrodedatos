@@ -8,14 +8,17 @@ namespace Registro_V1
 	{
 		static void Main(string[] args)
 		{	
-			bool add = true;
-			char conditional;
-			long id;
+			bool add = true, found = true;
+			char conditional, split=',';
+			string id;
 			int edad;
 			byte select = 0;
-			string name, last_name, record, input;
+			string name, last_name, record, input, line;
+			string[] camp = new string[4];
+			StreamReader reader;
+			StreamWriter write;
 
-			Console.Write("1- Agregar \n2- Listar\n3- Buscar\nElija la opcion deseada: ");
+			Console.Write("1- Agregar \n2- Listar\n3- Buscar\n4- Editar\n5- Eliminar\nElija la opcion deseada: ");
 			select = Byte.Parse(Console.ReadLine());
 
 			switch(select)
@@ -24,7 +27,7 @@ namespace Registro_V1
 					while(add)
 					{
 						Console.Write("Inserte su Numero de Cedula: ");
-						id = (Int64.Parse(Console.ReadLine()));
+						id = Console.ReadLine();
 
 						Console.Write("Inserte su Nombre: ");
 						name = Console.ReadLine();
@@ -95,6 +98,126 @@ namespace Registro_V1
 						record = find.ReadLine();
 					}
 					Console.ReadKey();
+
+				break;
+
+				case 4:
+				try
+				{
+					reader = File.OpenText("/Users/fernandor/Desktop/C/Registro.csv");
+					write = File.CreateText("/Users/fernandor/Desktop/C/tmp_Registro.csv");
+					id = Console.ReadLine();
+					line = reader.ReadLine();
+
+					while(line != null)
+					{
+						camp = line.Split(split);
+						if(camp[0].Trim().Equals(id))
+						{
+							found = true;
+							Console.WriteLine("La Informacion registrada es: " + id);
+							Console.WriteLine("Es correcto el valor encontrado?(Y/N): ");
+							conditional = Convert.ToChar(Console.ReadLine());
+
+							if(conditional == 'Y' || conditional == 'y')
+							{
+								Console.Write("Inserte su Numero de Cedula: ");
+								id = Console.ReadLine();
+
+								Console.Write("Inserte su Nombre: ");
+								name = Console.ReadLine();
+
+								Console.Write("Inserte su Apellido: ");
+								last_name = Console.ReadLine();
+
+								Console.Write("Inserte su edad: ");
+								edad = (Int32.Parse(Console.ReadLine()));
+
+								Console.WriteLine("La Informacion registrada es: " + id + "," + name + "," + last_name + "," + edad + "\n \n");
+
+								Console.Write("Desea guardar?(Y/N): ");
+								conditional = Convert.ToChar(Console.ReadLine());
+
+								if(conditional == 'Y' || conditional == 'y')
+								{
+									write.WriteLine(id + "," + name + "," + last_name + "," + edad);
+								}
+
+							}
+
+						
+						}
+
+						else
+						{
+							write.WriteLine(line);
+						}
+						line = reader.ReadLine();
+					}
+
+					if(found == false)
+					{
+						Console.WriteLine("Esta cedula no exite");
+
+					}
+					else
+					{
+						reader.Close();
+						write.Close();
+						File.Delete("/Users/fernandor/Desktop/C/Registro.csv");
+						File.Move("/Users/fernandor/Desktop/C/tmp_Registro.csv", "/Users/fernandor/Desktop/C/Registro.csv");
+					}
+				}
+				catch(FileNotFoundException ex)
+				{
+					Console.WriteLine("Error: {0}",ex.Message);
+				}
+
+				break;
+
+				case 5:
+				try
+				{
+					reader = File.OpenText("/Users/fernandor/Desktop/C/Registro.csv");
+					write = File.CreateText("/Users/fernandor/Desktop/C/tmp_Registro.csv");
+					id = Console.ReadLine();
+					line = reader.ReadLine();
+
+					while(line != null)
+					{
+						camp = line.Split(',');
+						if(camp[0].Trim().Equals(id))
+						{
+							found = true;
+							
+
+						
+						}
+
+						else
+						{
+							write.WriteLine(line);
+						}
+						line = reader.ReadLine();
+					}
+
+					if(found == false)
+					{
+						Console.WriteLine("Esta cedula no exite");
+
+					}
+					else
+					{
+						reader.Close();
+						write.Close();
+						File.Delete("/Users/fernandor/Desktop/C/Registro.csv");
+						File.Move("/Users/fernandor/Desktop/C/tmp_Registro.csv", "/Users/fernandor/Desktop/C/Registro.csv");
+					}
+				}
+				catch(FileNotFoundException ex)
+				{
+					Console.WriteLine("Error: {0}",ex.Message);
+				}
 
 				break;
 
