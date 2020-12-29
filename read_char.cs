@@ -8,7 +8,7 @@ namespace read_char_by_me
 		{
 			Console.WriteLine("Leer char por char");
 
-			string password = "",cedula = "", age = "", money = "";
+			string password = "",id = "", age = "", money = "";
 
 			Console.Write("Contraseña: ");
 			ReadPassword(password);
@@ -22,24 +22,24 @@ namespace read_char_by_me
 			}
 
 			Console.Write("Cedula: ");
-			ReadCedula(cedula);
+			id = ReadCedula();
 			Console.WriteLine();
 
 			Console.Write("Edad: ");
-			ReadAge(age);
+			age = ReadAge();
 			Console.WriteLine();
 
 			Console.Write("Ahorros: ");
-			ReadMoney(money);
+			money = ReadMoney();
 			Console.WriteLine();
 
 		}
 
-		static string ReadPassword(string pstring)
+		static string ReadPassword()
 		{
-			Console.Write(pstring);
+			Console.Write("");
 
-			while(true)
+			while (true)
 			{
 				string password = "";
 				ConsoleKey key;
@@ -49,19 +49,19 @@ namespace read_char_by_me
 					var keyInfo = Console.ReadKey(intercept: true);
 					key = keyInfo.Key;
 
-					if(key == ConsoleKey.Backspace && password.Length > 0)
+					if (key == ConsoleKey.Backspace && password.Length > 0)
 					{
 						Console.Write("\b \b");
 						password = password.Remove(password.Length - 1);
 					}
-					else if(!char.IsControl(keyInfo.KeyChar))
+					else if (!char.IsControl(keyInfo.KeyChar))
 					{
 						Console.Write("*");
 						password += keyInfo.KeyChar;
 					}
 
-				
-				} while(key != ConsoleKey.Enter);
+
+				} while (key != ConsoleKey.Enter);
 
 				if (password == "")
 				{
@@ -70,13 +70,13 @@ namespace read_char_by_me
 
 				return password;
 			}
-		
+
 		}
 
-		static string ReadCedula(string text)
+		static string Readid()
 		{
-			Console.Write(text);
-			while(true)
+			Console.Write("");
+			while (true)
 			{
 				string data = "";
 				ConsoleKey key;
@@ -89,74 +89,68 @@ namespace read_char_by_me
 					int value;
 					bool success = int.TryParse(keyInfo.KeyChar.ToString(), out value);
 
-					if(key == ConsoleKey.Backspace && data.Length > 0)
+					if (key == ConsoleKey.Backspace && data.Length > 0)
 					{
 						Console.Write("\b \b");
 						data = data.Remove(data.Length - 1);
 					}
-					else if(!char.IsControl(keyInfo.KeyChar))
+					else if (!char.IsControl(keyInfo.KeyChar) && success)
 					{
-						Console.Write("*");
+						Console.Write(keyInfo.KeyChar);
 						data += keyInfo.KeyChar;
 					}
 
-				} while(key != ConsoleKey.Enter);
+				} while (key != ConsoleKey.Enter);
 
 				if (data == "")
-				{
 					continue;
-				}
 
 				return data;
 			}
-
 		}
 
-		static int ReadAge(string text)
+		static int ReadAge()
 		{
-			Console.Write(text);
-			while(true)
-			{
-				string data = "";
-				ConsoleKey key;
-
-
-				do
+			
+				Console.Write("");
+				while (true)
 				{
-					var keyInfo = Console.ReadKey(intercept: true);
-					key = keyInfo.Key;
+					string data = "";
+					ConsoleKey key;
 
-					int value;
-					bool success = int.TryParse(keyInfo.KeyChar.ToString(), out value);
-
-					if(key == ConsoleKey.Backspace && data.Length > 0)
+					do
 					{
-						Console.Write("\b \b");
-						data = data.Remove(data.Length - 1);
-					}
-					else if(!char.IsControl(keyInfo.KeyChar))
-					{
-						Console.Write("*");
-						data += keyInfo.KeyChar;
-					}
+						var keyInfo = Console.ReadKey(intercept: true);
+						key = keyInfo.Key;
 
-				} while(key != ConsoleKey.Enter);
+						int value;
+						bool success = int.TryParse(keyInfo.KeyChar.ToString(), out value);
 
-				if (data == "")
-				{
-					continue;
+						if (key == ConsoleKey.Backspace && data.Length > 0)
+						{
+							Console.Write("\b \b");
+							data = data.Remove(data.Length - 1);
+						}
+						else if (!char.IsControl(keyInfo.KeyChar) && success)
+						{
+							Console.Write(keyInfo.KeyChar);
+							data += keyInfo.KeyChar;
+						}
+					} while (key != ConsoleKey.Enter);
+
+					if (data == "")
+						continue;
+
+					return int.Parse(data);
+
 				}
 
-				return int.Parse(data);
-
-			}
-
 		}
 
-		static decimal ReadMoney(string text)
+		static decimal ReadMoney()
 		{
-			Console.Write(text);
-			while(true)
+			Console.Write("");
+			while (true)
 			{
 				string data = "";
 				ConsoleKey key;
@@ -170,7 +164,7 @@ namespace read_char_by_me
 					int value;
 					bool success = int.TryParse(keyInfo.KeyChar.ToString(), out value) || (keyInfo.KeyChar == '.' && c == 0);
 
-					if(keyInfo.KeyChar == '.')
+					if (keyInfo.KeyChar == '.')
 					{
 						c = 1;
 					}
@@ -179,18 +173,18 @@ namespace read_char_by_me
 						c = 0;
 					}
 
-					if(key == ConsoleKey.Backspace && data.Length > 0)
+					if (key == ConsoleKey.Backspace && data.Length > 0)
 					{
 						Console.Write("\b \b");
 						data = data.Remove(data.Length - 1);
 					}
-					else if(!char.IsControl(keyInfo.KeyChar) && success)
+					else if (!char.IsControl(keyInfo.KeyChar) && success)
 					{
 						Console.Write(keyInfo.KeyChar);
 						data += keyInfo.KeyChar;
 					}
 
-				} while(key != ConsoleKey.Enter);
+				} while (key != ConsoleKey.Enter);
 
 				if (data == "")
 				{

@@ -13,8 +13,9 @@ namespace Registro_V1
 			string id;
 			int edad;
 			byte select = 0;
-			string name, last_name, record, input, line;
+			string name, last_name, record, input, line, pass1, pass2;
 			string[] camp = new string[4];
+			decimal money = 0;
 			StreamReader reader;
 			StreamWriter write;
 
@@ -27,18 +28,42 @@ namespace Registro_V1
 					while(add)
 					{
 						Console.Write("Inserte su Numero de Cedula: ");
-						id = Console.ReadLine();
+						id = Readid();
+						Console.WriteLine();
 
 						Console.Write("Inserte su Nombre: ");
 						name = Console.ReadLine();
+						Console.WriteLine();
 
 						Console.Write("Inserte su Apellido: ");
 						last_name = Console.ReadLine();
+						Console.WriteLine();
 
 						Console.Write("Inserte su edad: ");
-						edad = (Int32.Parse(Console.ReadLine()));
+						edad = ReadAge();
+						Console.WriteLine();
 
-						Console.WriteLine("La Informacion registrada es: " + id + "," + name + "," + last_name + "," + edad + "\n \n");
+						Console.Write("Ahorros: ");
+						money = ReadMoney();
+						Console.WriteLine();
+
+						goodpass:
+						Console.Write("Contraseña: ");
+						pass1 = ReadPassword();
+						Console.WriteLine();
+
+						Console.Write("Confirmar Contraseña: ");
+						pass2 = ReadPassword();
+						Console.WriteLine();
+
+						if(pass1 == pass2)
+						{
+							Console.WriteLine("La Informacion registrada es: " + id + "," + name + "," + last_name + "," + edad + "," + money + "," + pass1 + "\n \n");
+						}
+						else
+						{
+							goto goodpass;
+						}
 
 						Console.Write("Desea Seguir Agregando?(Y/N):  ");
 						conditional = Char.Parse(Console.ReadLine());
@@ -47,7 +72,7 @@ namespace Registro_V1
 						{
 							using (StreamWriter Data = new StreamWriter(file_write))
 							{
-								Data.WriteLine(id + "," + name + "," + last_name + "," + edad);
+								Data.WriteLine(id + "," + name + "," + last_name + "," + edad + "," + money + "," + pass1);
 							}
 						}
 
@@ -133,7 +158,7 @@ namespace Registro_V1
 								Console.Write("Inserte su edad: ");
 								edad = (Int32.Parse(Console.ReadLine()));
 
-								Console.WriteLine("La Informacion registrada es: " + id + "," + name + "," + last_name + "," + edad + "\n \n");
+								Console.WriteLine("La Informacion registrada es: " + id + "," + name + "," + last_name + "," + edad + "," + money +"\n \n");
 
 								Console.Write("Desea guardar?(Y/N): ");
 								conditional = Convert.ToChar(Console.ReadLine());
@@ -225,5 +250,170 @@ namespace Registro_V1
 			}
 
 		}
+
+		static string ReadPassword()
+		{
+			Console.Write("");
+
+			while (true)
+			{
+				string password = "";
+				ConsoleKey key;
+
+				do
+				{
+					var keyInfo = Console.ReadKey(intercept: true);
+					key = keyInfo.Key;
+
+					if (key == ConsoleKey.Backspace && password.Length > 0)
+					{
+						Console.Write("\b \b");
+						password = password.Remove(password.Length - 1);
+					}
+					else if (!char.IsControl(keyInfo.KeyChar))
+					{
+						Console.Write("*");
+						password += keyInfo.KeyChar;
+					}
+
+
+				} while (key != ConsoleKey.Enter);
+
+				if (password == "")
+				{
+					continue;
+				}
+
+				return password;
+			}
+
+		}
+
+		static string Readid()
+		{
+			Console.Write("");
+			while (true)
+			{
+				string data = "";
+				ConsoleKey key;
+
+				do
+				{
+					var keyInfo = Console.ReadKey(intercept: true);
+					key = keyInfo.Key;
+
+					int value;
+					bool success = int.TryParse(keyInfo.KeyChar.ToString(), out value);
+
+					if (key == ConsoleKey.Backspace && data.Length > 0)
+					{
+						Console.Write("\b \b");
+						data = data.Remove(data.Length - 1);
+					}
+					else if (!char.IsControl(keyInfo.KeyChar) && success)
+					{
+						Console.Write(keyInfo.KeyChar);
+						data += keyInfo.KeyChar;
+					}
+
+				} while (key != ConsoleKey.Enter);
+
+				if (data == "")
+					continue;
+
+				return data;
+			}
+		}
+
+		static int ReadAge()
+		{
+			
+				Console.Write("");
+				while (true)
+				{
+					string data = "";
+					ConsoleKey key;
+
+					do
+					{
+						var keyInfo = Console.ReadKey(intercept: true);
+						key = keyInfo.Key;
+
+						int value;
+						bool success = int.TryParse(keyInfo.KeyChar.ToString(), out value);
+
+						if (key == ConsoleKey.Backspace && data.Length > 0)
+						{
+							Console.Write("\b \b");
+							data = data.Remove(data.Length - 1);
+						}
+						else if (!char.IsControl(keyInfo.KeyChar) && success)
+						{
+							Console.Write(keyInfo.KeyChar);
+							data += keyInfo.KeyChar;
+						}
+					} while (key != ConsoleKey.Enter);
+
+					if (data == "")
+						continue;
+
+					return int.Parse(data);
+
+				}
+
+		}
+
+		static decimal ReadMoney()
+		{
+			Console.Write("");
+			while (true)
+			{
+				string data = "";
+				ConsoleKey key;
+				int c = 0;
+
+				do
+				{
+					var keyInfo = Console.ReadKey(intercept: true);
+					key = keyInfo.Key;
+
+					int value;
+					bool success = int.TryParse(keyInfo.KeyChar.ToString(), out value) || (keyInfo.KeyChar == '.' && c == 0);
+
+					if (keyInfo.KeyChar == '.')
+					{
+						c = 1;
+					}
+					else
+					{
+						c = 0;
+					}
+
+					if (key == ConsoleKey.Backspace && data.Length > 0)
+					{
+						Console.Write("\b \b");
+						data = data.Remove(data.Length - 1);
+					}
+					else if (!char.IsControl(keyInfo.KeyChar) && success)
+					{
+						Console.Write(keyInfo.KeyChar);
+						data += keyInfo.KeyChar;
+					}
+
+				} while (key != ConsoleKey.Enter);
+
+				if (data == "")
+				{
+					continue;
+				}
+
+				return decimal.Parse(data);
+
+			}
+
+		}
+
+
+
 	}
 }
